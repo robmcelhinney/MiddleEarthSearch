@@ -1,0 +1,46 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: black;
+}
+
+#search {
+    width: 50%;
+    height: 2.5%;
+}
+#searchbox {
+    height: 2.5%;
+}
+
+.search {
+    padding:8px 15px;
+    background:rgba(50, 50, 50, 0.2);
+    border:0px solid #dbdbdb;
+}
+
+#section {
+    background: rgba(31, 31, 31, .85);
+    padding:1.5rem;
+    margin:0 auto;
+    border-radius:1px;
+    position: relative;
+    width: 50rem;
+    text-align: center;
+}
+
+.query {
+    color: white;
+    font-size: 2.5em;
+}
+
+.submit {
+    position:relative;
+    padding:6px 15px;
+    left:-8px;
+    border:2px solid #207cca;
+    background-color:#207cca;
+    color:#fafafa;
+}
+.submit:hover  {
+    background-color:#fafafa;
+    color:#207cca;
+}
