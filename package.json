@@ -6,6 +6,7 @@
     "@material-ui/core": "^3.9.3",
     "@types/sql.js": "0.0.29",
     "fs": "0.0.1-security",
+    "query-string": "^6.5.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
