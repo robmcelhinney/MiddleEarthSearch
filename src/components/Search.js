@@ -2,8 +2,12 @@ import React from 'react';
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import MiddleEarth from "./../MiddleEarth.json"
+import Slide from '@material-ui/core/Slide';
+
+let MAXCARDS = 10;
 
 class Search extends React.Component {
+
 
 	constructor(props) {
 		super(props);
@@ -11,11 +15,11 @@ class Search extends React.Component {
 			query: '',
 			chapters: [],
 			count: null,
+			currCount: 1,
 		};
-
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		// console.log("constructor search: ", this.props.query)
+		this.resetState = this.resetState.bind(this);
 	}
 
 	handleChange(event) {
@@ -23,11 +27,18 @@ class Search extends React.Component {
 	}
 
 	handleSubmit(event) {
-		this.setState({chapters: []});
+		this.resetState();
         this.query_json();
-        // console.log("chapters: ", this.state.chapters);
 		event.preventDefault();
 	}
+
+	resetState() {
+		this.state.chapters = [];
+		this.state.count = 0;
+		this.state.currCount = 1;
+
+		// this.setState({chapters: []});
+	};
 
 	componentDidMount() {
 		console.log("mounted search: ", this.props.query);
@@ -38,7 +49,7 @@ class Search extends React.Component {
 		}
 	}
 
-    render() {
+	render() {
         return (
         	<div>
 				<div id="search_container">
@@ -53,20 +64,22 @@ class Search extends React.Component {
 					</section>
 				</div>
 
-				<div id={"content"}>
-					<div id={"cards"}>
+				<div id="content">
+					<div id="cards">
 						{this.count()}
 						{this.state.chapters.map(item => (
 							<Card className={'card'} key={item['paragraph']}>
 								<CardContent>
 									<div className={"book_chap"}>
-										{item['book_name']} - {item['chapter_name']}
+										{item['chapter_name']} - {item['book_name']}
 									</div>
 									{Search.paragraph(item)}
 								</CardContent>
 							</Card>
 						))}
+						{this.loadMore()}
 					</div>
+                    <div id={"footer"}>Rob McElhinney</div>
 				</div>
 			</div>
         );
@@ -75,29 +88,34 @@ class Search extends React.Component {
     query_json() {
 		// Gandalf the Grey
 		// fly you fools
+		// even as it fell it swung it's
+		//saruman the white
 		// This tale grew in the telling
-		let query = this.state.query.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "");
+		//tom bombadil
+		let query = this.state.query.replace(/[.,\/#!$%\^&\*;:{}=\-_~()/"/']/g, "");
 		query = query.trim();
-		// query = query.replace('!\s+!', ' ');
-		// query = this.basic_words(query);
-		let results = [];
+		console.log("query: ", query);
+		let results = this.state.chapters;
 		let MiddleEarthObj = JSON.parse(JSON.stringify(MiddleEarth));
 		let count = 0;
+		let currCount = this.state.currCount;
+		let maxCount = currCount + MAXCARDS;
+
 		for(let book in MiddleEarth) {
 			for(let section in MiddleEarthObj[book]) {
-				let para = MiddleEarthObj[book][section]['paragraph'].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+				let para = MiddleEarthObj[book][section]['paragraph'].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()/"/']/g,"");
 				if(new RegExp(query, 'gi').test(para)
 						&& !new RegExp(query).test("<b>")) {
-					// MiddleEarthObj[book][section]['paragraph'] =
-					// 		MiddleEarthObj[book][section]['paragraph']
-					// 		.replace(new RegExp(`(${this.state.query})`,
-					// 		'gi'), '<b>$&</b>');
+
+					count++;
+					if (currCount === maxCount || count < currCount) {
+						continue;
+					}
+					currCount++;
 
 
 					MiddleEarthObj[book][section]['paragraph'] =
 						this.boldText(MiddleEarthObj[book][section]['paragraph'], query);
-
-
 
 					if(Number(section) > 0 &&
 							MiddleEarthObj[book][section]['chapter_num']
@@ -105,9 +123,9 @@ class Search extends React.Component {
 							'chapter_num']) {
 						MiddleEarthObj[book][section]['paragraphPrev'] =
 								MiddleEarthObj[book][Number(section) - 1][
-								'paragraph']
+								'paragraph'].replace(/(<b>|<\/b>)/g,"");
 					}
-					if(Number(section) < MiddleEarthObj[book].length  &&
+					if(Number(section) + 1 < MiddleEarthObj[book].length &&
 							MiddleEarthObj[book][section]['chapter_num']
 							=== MiddleEarthObj[book][Number(section) + 1][
 							'chapter_num']) {
@@ -116,20 +134,48 @@ class Search extends React.Component {
 								'paragraph']
 					}
 					results.push(MiddleEarthObj[book][section]);
-					count++;
 				}
 			}
 		}
 		this.setState({count: count});
+		this.setState({currCount: currCount});
 		this.setState({chapters: results});
 	}
 
 	count() {
 		if(this.state.count !== null) {
+			let result = "result";
+			if(this.state.count > 1) {
+				result += "s";
+			}
 			return (
-				<section className={"results_found"}>{this.state.count} results found.</section>
+				<Card  className={"card results_found"} key="count">
+					<CardContent>
+						<section>{this.state.count} {result} found.</section>
+					</CardContent>
+				</Card>
 			);
 		}
+	}
+
+	loadMore() {
+		console.log("this.state.count: ", this.state.count);
+		console.log("this.state.currCount: ", this.state.currCount);
+		if(this.state.count !== null && this.state.count >= this.state.currCount) {
+			return (
+				<Card className={"card load_more clickable"} key="loadMore"
+						onClick={e => this.handleLoadMore(e)}>
+					<CardContent>
+						<section>Load More</section>
+					</CardContent>
+				</Card>
+			);
+		}
+	}
+
+	handleLoadMore(event) {
+		event.preventDefault();
+		this.query_json();
 	}
 
 	static paragraph(item) {
@@ -159,42 +205,41 @@ class Search extends React.Component {
 
 	boldText(strSubject, query)
 	{
-		//crashed into the
+		// I am very fond indeed of
 		query = this.basic_words(query);
 		let words = query.split(" ");
-		// console.log("arrWords: ", arrWords)
 		for (let s = 0; s < words.length; s += 1)
 		{
-			// console.log("s: ", words[s])
-			// console.log("replace: ", this.preg_quote(words[s], "/"))
-			let pattern = new RegExp(this.preg_quote(words[s], "/"),'gi');
+			let pattern = new RegExp('\\b' + this.preg_quote(words[s], "/") + '\\b','gi');
+			// console.log("pattern: ", pattern);
 			strSubject = strSubject.replace(pattern, "<b>$&</b>","\n");
 		}
-		// console.log(strSubject);
 		return strSubject;
 	}
 
 	preg_quote(str, delimiter){
-		return (str + '')
-			.replace(new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+		return (str + '').replace(
+				new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' +
+				(delimiter || '') + '-]', 'g'), '\\$&');
 	}
 
 	basic_words(query) {
-		let keywordarray = ['a','about','an','are','as','at','be', 'by','com','for','from','how','i','in','is','it','la','of','on','or', 'that','the','this','to','was','what','when','where', 'who','will','with'];
-		query = query.replace('/\b(' + keywordarray.join('|') + ')\b/i', '');
-		// console.log("imploding string: ", keywordarray.join('|'))
-		// console.log("query: ", query)
+		let keyword_array = ['a','about','an','are','as','at','be', 'by','com','for','from','how','i','in','is','it','la','of','on','or', 'that','the','this','to','was','what','when','where', 'who','will','with'];
+		query = query.replace('/\b(' + keyword_array.join('|') + ')\b/i', '');
 
 		let replaced = query.replace(/\b\w+\b/g, function ($m) {
-			let key = keywordarray.indexOf($m);
-
+			let key = keyword_array.indexOf($m);
 			return (key !== -1)? '' : $m;
 		});
 		replaced = replaced.replace(/\s+/g,' ');
-		console.log("replaced: ", replaced);
+		// console.log("replaced: ", replaced);
 		replaced = replaced.trim();
 		return replaced
 	}
 }
+
+// function Transition(props) {
+// 	return <Slide direction="up" {...props} />;
+// }
 
 export default Search;

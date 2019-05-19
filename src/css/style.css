@@ -1,23 +1,36 @@
+html, body, #app, #root {
+    height: 100%;
+    margin: 0;
+}
+
+html {
+    overflow-y: scroll;
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     color: black;
+    height: 100%;
     width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F5F5;
     /*background: url('../images/balrog.jpg') no-repeat center center;*/
+    /*background: url('../images/balrog.jpg') no-repeat center center fixed;*/
+    /*-webkit-background-size: cover;*/
+    /*-moz-background-size: cover;*/
+    /*-o-background-size: cover;*/
+    /*background-size: cover;*/
+}
+
+#app {
     background: url('../images/balrog.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
-}
-
-#app {
-    /*background: url('../images/balrog.jpg') no-repeat center;*/
-    /*background-size:contain;*/
-    /*-webkit-background-size:cover;*/
-    /*-moz-background-size:cover;*/
-    /*-o-background-size:cover;*/
-    /*background-size: cover !important;*/
     height: 100%;
+    position: relative;
+    z-index: 2;
 }
 
 #search {
@@ -29,22 +42,24 @@ body {
     /*height: 2.5%;*/
 }
 
-.search {
-    /*padding:8px 15px;*/
-    /*background:rgba(50, 50, 50, 0.2);*/
-}
-
 #search_container {
     background: rgba(31, 31, 31, .35);
-    position: relative;
     text-align: center;
+    /*position: relative;*/
+    position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     height: 20em;
     max-width: 50rem;
-    /*margin: 20em auto 5em;*/
-    margin: auto;
     vertical-align: middle;
-    text-align: center;
+    /*margin: 10em auto auto;*/
+    margin: auto;
+    width: 80%;
+    z-index: 1;
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
 }
 
 #section {
@@ -69,18 +84,24 @@ body {
 
 #content {
     background-color: #F5F5F5;
-    height: 100%;
+    bottom: 0;
+    position: absolute;
+    /*position: relative;*/
+    max-height: 40%;
+    width: 100%;
+    z-index: 2;
 }
 
 #cards {
     margin: 0 auto;
     max-width: 50em;
+    height: 100%;
 }
 
 .card {
     padding:0.3rem;
     background-color: white;
-    margin: 0 2rem 1em;
+    margin: 0 1rem 1em;
 }
 
 .book_chap {
@@ -93,6 +114,8 @@ body {
 
 .results_found {
     text-align: center;
+    margin-bottom: 2em;
+    margin-top: 2em;
 }
 
 .prev {
@@ -106,4 +129,20 @@ body {
 
 .next {
     /*margin-bottom: 0.9em;*/
+}
+
+.load_more{
+    text-align: center;
+    /*margin-bottom: 2em;*/
+    margin-top: 1em;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+#footer {
+    text-align: center;
+    font-size: 0.8em;
+    color: #888;
 }
