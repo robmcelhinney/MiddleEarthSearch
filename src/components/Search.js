@@ -2,7 +2,8 @@ import React from 'react';
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import MiddleEarth from "./../MiddleEarth.json"
-import Slide from '@material-ui/core/Slide';
+import * as constants from "../constants";
+import * as queryString from "query-string";
 
 let MAXCARDS = 10;
 
@@ -12,7 +13,7 @@ class Search extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			query: '',
+			query: this.props.query || "",
 			chapters: [],
 			count: null,
 			currCount: 1,
@@ -20,6 +21,12 @@ class Search extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.resetState = this.resetState.bind(this);
+
+		this.props.history.listen((location) => {
+			let values = queryString.parse(location.search);
+			this.setState({query: values.q});
+			this.reset_and_search();
+		});
 	}
 
 	handleChange(event) {
@@ -27,38 +34,42 @@ class Search extends React.Component {
 	}
 
 	handleSubmit(event) {
-		this.resetState();
-        this.query_json();
+		this.reset_and_search();
 		event.preventDefault();
+	}
+
+	reset_and_search() {
+		this.resetState();
+		this.edit_url();
+		this.query_json();
 	}
 
 	resetState() {
 		this.state.chapters = [];
 		this.state.count = 0;
 		this.state.currCount = 1;
-
-		// this.setState({chapters: []});
 	};
 
 	componentDidMount() {
 		console.log("mounted search: ", this.props.query);
-		if (this.props.query !== "") {
+		if (this.props.query !== undefined) {
 			// console.log("query not null in search");
 			this.setState({query: this.props.query});
 			this.query_json();
+			this.edit_title();
 		}
 	}
 
 	render() {
         return (
-        	<div>
+        	<div id={"search"}>
 				<div id="search_container">
 					<section id="section">
 						<section className="query">Search Middle Earth</section>
 						<form id="form" onSubmit={this.handleSubmit}>
 							<input type="text" value={this.state.query}
 									onChange={this.handleChange}
-									placeholder="type query here" id="search"/>
+									placeholder="type query here" id="searchtext"/>
 							<input type="submit" value='Search' id="searchbox" />
 					</form>
 					</section>
@@ -79,7 +90,7 @@ class Search extends React.Component {
 						))}
 						{this.loadMore()}
 					</div>
-                    <div id={"footer"}>Rob McElhinney</div>
+					<div id={"footer"}><a href={"https://twitter.com/RMcElhinney"}>Rob McElhinney</a></div>
 				</div>
 			</div>
         );
@@ -236,10 +247,15 @@ class Search extends React.Component {
 		replaced = replaced.trim();
 		return replaced
 	}
-}
 
-// function Transition(props) {
-// 	return <Slide direction="up" {...props} />;
-// }
+	edit_url() {
+		window.history.pushState({}, document.title, "/#/?q=" + this.state.query);
+		this.edit_title();
+	}
+
+	edit_title() {
+		document.title = constants.title + ' - ' + this.state.query;
+	}
+}
 
 export default Search;
