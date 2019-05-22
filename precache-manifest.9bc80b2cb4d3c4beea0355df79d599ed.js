@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0d55c2406043591bbd8337e6ff73331f",
+    "revision": "cb73e30d7cb9dc225cd2946a5d3bc216",
     "url": "/MiddleEarthSearch/index.html"
   },
   {
-    "revision": "8f1c6dfff030ddfddc11",
+    "revision": "7cb1c227bfd2151d353d",
     "url": "/MiddleEarthSearch/static/css/main.d2d366ee.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/MiddleEarthSearch/static/js/2.e92e7dcc.chunk.js"
   },
   {
-    "revision": "8f1c6dfff030ddfddc11",
-    "url": "/MiddleEarthSearch/static/js/main.df05b839.chunk.js"
+    "revision": "7cb1c227bfd2151d353d",
+    "url": "/MiddleEarthSearch/static/js/main.e7f58c7b.chunk.js"
   },
   {
     "revision": "d847b0605ab4f829ae36",
