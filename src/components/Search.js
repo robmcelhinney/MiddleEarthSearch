@@ -40,8 +40,11 @@ class Search extends React.Component {
 
 	reset_and_search() {
 		this.resetState();
-		this.edit_url();
-		this.query_json();
+		if (this.state.query !== "") {
+			// console.log("this.state.query: ", this.state.query);
+			this.edit_url();
+			this.query_json();
+		}
 	}
 
 	resetState() {
@@ -105,7 +108,7 @@ class Search extends React.Component {
 		//tom bombadil
 		let query = this.state.query.replace(/[.,\/#!$%\^&\*;:{}=\-_~()/"/']/g, "");
 		query = query.trim();
-		console.log("query: ", query);
+		// console.log("query: ", query);
 		let results = this.state.chapters;
 		let MiddleEarthObj = JSON.parse(JSON.stringify(MiddleEarth));
 		let count = 0;
@@ -154,7 +157,7 @@ class Search extends React.Component {
 	}
 
 	count() {
-		if(this.state.count !== null) {
+		if(this.state.count !== null && this.state.query !== "") {
 			let result = "result";
 			if(this.state.count > 1) {
 				result += "s";
@@ -170,8 +173,8 @@ class Search extends React.Component {
 	}
 
 	loadMore() {
-		console.log("this.state.count: ", this.state.count);
-		console.log("this.state.currCount: ", this.state.currCount);
+		// console.log("this.state.count: ", this.state.count);
+		// console.log("this.state.currCount: ", this.state.currCount);
 		if(this.state.count !== null && this.state.count >= this.state.currCount) {
 			return (
 				<Card className={"card load_more clickable"} key="loadMore"
@@ -249,7 +252,7 @@ class Search extends React.Component {
 	}
 
 	edit_url() {
-		window.history.pushState({}, document.title, "/#/?q=" + this.state.query);
+		window.history.pushState({}, document.title, "/MiddleEarthSearch/#/?q=" + this.state.query);
 		this.edit_title();
 	}
 
