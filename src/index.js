@@ -1,6 +1,6 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'
+import {render} from 'react-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom'
 
 import './css/style.css';
 import App from './components/App';
@@ -11,7 +11,6 @@ const Root = () => {
         <Router basename='/'>
             <Switch>
                 <Route path='/' component={App} />
-                {/*<Route path={'/q'} component={App} />*/}
                 <Route component={NotFound} />
             </Switch>
         </Router>

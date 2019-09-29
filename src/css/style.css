@@ -3,42 +3,34 @@ html, body, #app, #root {
     margin: 0;
 }
 
-html {
-    overflow-y: scroll;
-}
-
 body {
     font-family: 'Roboto', sans-serif;
     color: black;
-    height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
     background-color: #F5F5F5;
+    display:flex;
+    flex-direction:column;
 }
+
 #search {
     background: url('../images/balrog.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
+    background-size: cover !important;
+    z-index: 1;
+    -webkit-transform: translateZ(0);
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    position: relative;
-    z-index: 2;
 }
 
-#searchtext {
-    width: 80%;
-    height: 2.5%;
-}
-
-#searchbox {
-    /*height: 2.5%;*/
-}
-
-#search_container {
+#search_container_default {
     background: rgba(31, 31, 31, .35);
     text-align: center;
-    /*position: relative;*/
     position: absolute;
     top: 0;
     left: 0;
@@ -47,14 +39,13 @@ body {
     height: 20em;
     max-width: 50rem;
     vertical-align: middle;
-    /*margin: 10em auto auto;*/
     margin: auto;
     width: 80%;
     z-index: 1;
-    /*left: 50%;*/
-    /*transform: translate(-50%, -50%);*/
+    top: 0;
+    left: 0;
+    right: 0;
 }
-
 #section {
     padding:1.5rem;
     margin:0 auto;
@@ -77,10 +68,8 @@ body {
 
 #content {
     background-color: #F5F5F5;
-    bottom: 0;
-    position: absolute;
-    /*position: relative;*/
-    max-height: 40%;
+    position: relative;
+    margin-top: auto;
     width: 100%;
     z-index: 2;
 }
@@ -89,6 +78,7 @@ body {
     margin: 0 auto;
     max-width: 50em;
     height: 100%;
+    overflow: auto;
 }
 
 .card {
@@ -137,6 +127,7 @@ body {
 #footer {
     text-align: center;
     font-size: 0.8em;
+    height: 1.5em;
     color: #999;
     text-decoration: none;
 }
