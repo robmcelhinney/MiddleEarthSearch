@@ -118,14 +118,14 @@ class Search extends React.Component {
 								margin: '0 auto',
 								maxWidth: 800
 							}}
-							value={this.state.query}
+							value={this.state.query || ""}
 						/>
 						<section>
 							<FormControl component="fieldset">
 								<FormGroup aria-label="position" name="position" row>
 									<FormControlLabel
 										value="TFOTR"
-										control={<Checkbox style={{color: 'white'}} />}
+										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("TFOTR")}/>}
 										label={
 											<Typography
 													style={{color: 'white'}}>
@@ -139,7 +139,7 @@ class Search extends React.Component {
 									/>
 									<FormControlLabel
 										value="TTT"
-										control={<Checkbox style={{color: 'white'}} />}
+										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("TTT")}/>}
 										label={
 											<Typography
 													style={{color: 'white'}}>
@@ -153,7 +153,7 @@ class Search extends React.Component {
 									/>
 									<FormControlLabel
 										value="ROTK"
-										control={<Checkbox style={{color: 'white'}} />}
+										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("ROTK")}/>}
 										label={
 											<Typography
 													style={{color: 'white'}}>

@@ -23,7 +23,8 @@ class Content extends React.Component {
                             className={'card'}
                             key={item['paragraph']}>
                             <CardContent>
-                                <div className={"book_chap"}>
+                                <div className={"book_chap"}
+                                     style={{color: 'black'}}>
                                     {item['chapter_name']} - {item['book_name']}
                                 </div>
                                 {this.paragraph(item)}
@@ -32,7 +33,8 @@ class Content extends React.Component {
                     ))}
                     {this.loadMore()}
                 </div>
-                <div id={"footer"}><a href={"https://twitter.com/RMcElhinney"}>Rob McElhinney</a></div>
+                <div id={"footer"}
+                     style={{color: 'black'}}><a href={"https://mertun.artstation.com/projects/Gk16N"}>Shall Not Pass</a> - ömer tunç | Created by <a href={"https://twitter.com/RMcElhinney"}>Rob McElhinney</a></div>
             </Card>
         );
     }
@@ -46,10 +48,13 @@ class Content extends React.Component {
             }
             return (
                 <Card className={"card results_found clickable"} key="count"
+                      style={{color: 'black'}}
                       onClick={e => this.handlePerBookCount(e)}>
                     <CardContent>
-                        <section>{count} {result} found.</section>
-                        <section>Click to search results by book.</section>
+                        <section
+                            style={{color: 'black'}}>{count} {result} found.</section>
+                        <section
+                            style={{color: 'black'}}>Click to search results by book.</section>
                         {this.resultsPerBook()}
                     </CardContent>
                 </Card>
@@ -63,7 +68,6 @@ class Content extends React.Component {
         if (perBookInfo && count !== 0) {
             return (
                 <>
-                    <section>Results per book.</section>
                     {
                         Object.keys(perBookCount).map((key) => (
                             <section key={key}>{key}: {perBookCount[key]}</section>
@@ -81,7 +85,8 @@ class Content extends React.Component {
                 <Card className={"card load_more clickable"} key="loadMore"
                       onClick={e => this.handleLoadMore(e)}>
                     <CardContent>
-                        <section>Load More</section>
+                        <section
+                            style={{color: 'black'}}>Load More</section>
                     </CardContent>
                 </Card>
             );
@@ -99,7 +104,8 @@ class Content extends React.Component {
 
     paragraph = (item) => {
         return (
-            <div className={"paragraphs"}>
+            <div className={"paragraphs"}
+                 style={{color: 'black'}}>
                 {this.otherParagraphs(item['paragraphPrev'], "prev")}
                 <div className={"results curr"} dangerouslySetInnerHTML={{__html: item['paragraph']}}/>
                 {this.otherParagraphs(item['paragraphNext'], "next")}
