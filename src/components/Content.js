@@ -5,136 +5,173 @@ import CardContent from "@material-ui/core/CardContent";
 
 class Content extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            perBookInfo: false
-        };
-    }
+	constructor(props) {
+		super(props);
+		this.state = {
+			perBookInfo: false,
+			clicked: []
+		};
+	}
 
-    render() {
-        const { chapters } = this.props;
-        return (
-            <Card id="content">
-                <div id="cards">
-                    {this.count()}
-                    {chapters.map(item => (
-                        <Card
-                            className={'card'}
-                            key={item['paragraph']}>
-                            <CardContent>
-                                <div className={"book_chap"}
-                                     style={{color: 'black'}}>
-                                    {item['chapter_name']} - {item['book_name']}
-                                </div>
-                                {this.paragraph(item)}
-                            </CardContent>
-                        </Card>
-                    ))}
-                    {this.loadMore()}
-                </div>
-                <div id={"footer"}
-                     style={{color: 'black'}}><a href={"https://mertun.artstation.com/projects/Gk16N"}>Shall Not Pass</a> - ömer tunç | Created by <a href={"https://twitter.com/RMcElhinney"}>Rob McElhinney</a></div>
-            </Card>
-        );
-    }
+	clickContent = (id) => {
+		const { clicked } = this.state;
+		console.log("clickContent")
+		if (!clicked.includes(id)) {
+			let joined = clicked.concat(id);
+			this.setState({clicked: joined})
+		}
+		else {
+			let array = [...clicked];
+			const index = clicked.indexOf(id);
+			array.splice(index, 1);
+			this.setState({clicked: array})
+		}
+	}
 
-    count = () => {
-        const {count} = this.props;
-        if(count !== null) {
-            let result = "result";
-            if(count > 1) {
-                result += "s";
-            }
-            return (
-                <Card className={"card results_found clickable"} key="count"
-                      style={{color: 'black'}}
-                      onClick={e => this.handlePerBookCount(e)}>
-                    <CardContent>
-                        <section
-                            style={{color: 'black'}}>{count} {result} found.</section>
-                        <section
-                            style={{color: 'black'}}>Click to search results by book.</section>
-                        {this.resultsPerBook()}
-                    </CardContent>
-                </Card>
-            );
-        }
-    }
+	render() {
+		const { chapters } = this.props;
+		const { clicked } = this.state;
+		return (
+			<Card id="content">
+				<div id="cards">
+					{this.count()}
+					{chapters.map(item => (
+						<Card
+							className={'card clickable'}
+							key={item['paragraph']}
+							onClick={() => this.clickContent(item['book_num'] + item['para_num'])}>
+							<CardContent style={{position: 'relative', padding: 0, maxHeight: `${clicked.includes(item['book_num'] + item['para_num']) ? '' : '400px'}`}}>
+								<div className={`book_chap ${clicked.includes(item['book_num'] + item['para_num']) ? '' : 'book_chap_shadow'}`}
+									 style={{color: 'black', padding: '15px 15px 15px'}}>
+									{item['book_name']} - {item['chapter_name']}
+								</div>
+								{this.paragraph(item)}
+								<div className={`${clicked.includes(item['book_num'] + item['para_num']) ? 'last_shadow_clicked' : 'last_shadow'}`}/>
+							</CardContent>
+						</Card>
+					))}
+					{this.loadMore()}
+				</div>
+				<div id={"footer"}
+					 style={{color: 'black'}}><a href={"https://mertun.artstation.com/projects/Gk16N"}>Shall Not Pass</a> - ömer tunç | Created by <a href={"https://twitter.com/RMcElhinney"}>Rob McElhinney</a></div>
+			</Card>
+		);
+	}
 
-    resultsPerBook = () => {
-        const {perBookInfo} = this.state;
-        const {perBookCount, count} = this.props;
-        if (perBookInfo && count !== 0) {
-            return (
-                <>
-                    {
-                        Object.keys(perBookCount).map((key) => (
-                            <section key={key}>{key}: {perBookCount[key]}</section>
-                        ))
-                    }
-                </>
-            )
+	count = () => {
+		const {count, query} = this.props;
+		if(query !== null && count !== null) {
+			let result = "result";
+			if(count > 1) {
+				result += "s";
+			}
+			return (
+				<Card className={"card results_found clickable"} key="count"
+					  style={{color: 'black', padding: '0'}}
+					  onClick={e => this.handlePerBookCount(e)}>
+					<CardContent>
+						<section
+							style={{color: 'black'}}>{count} {result} found.</section>
+						{this.resultsPerBook()}
+					</CardContent>
+				</Card>
+			);
+		}
+	}
 
-        }
-    }
+	resultsPerBook = () => {
+		const {perBookInfo} = this.state;
+		const {perBookCount, count} = this.props;
+		let result;
+		if (count !== 0) {
+			result = (
+				<section
+					style={{color: 'black'}}>Click to search results by book.</section>)
+			if (perBookInfo) {
+				result = (
+					<>
+						{result}
+					{
+						Object.keys(perBookCount).map((key) => (
+							<section key={key}>{key}: {perBookCount[key]}</section>
+						))
+					}
+					</>
+				)
+			}
+		}
+		return result;
+	}
 
-    loadMore = () => {
-        if(this.props.count !== null && this.props.count >= this.props.currCount) {
-            return (
-                <Card className={"card load_more clickable"} key="loadMore"
-                      onClick={e => this.handleLoadMore(e)}>
-                    <CardContent>
-                        <section
-                            style={{color: 'black'}}>Load More</section>
-                    </CardContent>
-                </Card>
-            );
-        }
-    }
+	loadMore = () => {
+		if(this.props.count !== null && this.props.count >= this.props.currCount) {
+			return (
+				<Card className={"card load_more clickable"} key="loadMore"
+					  onClick={e => this.handleLoadMore(e)}
+					  style={{color: 'black', padding: '0'}}>
+					<CardContent>
+						<section>Load More</section>
+					</CardContent>
+				</Card>
+			);
+		}
+	}
 
-    handlePerBookCount = () => {
-        this.setState({perBookInfo: !this.state.perBookInfo});
-    }
+	handlePerBookCount = () => {
+		this.setState({perBookInfo: !this.state.perBookInfo});
+	}
 
-    handleLoadMore = (event) => {
-        event.preventDefault();
-        this.props.query_json(false);
-    }
+	handleLoadMore = (event) => {
+		event.preventDefault();
+		this.props.query_json(false);
+	}
 
-    paragraph = (item) => {
-        return (
-            <div className={"paragraphs"}
-                 style={{color: 'black'}}>
-                {this.otherParagraphs(item['paragraphPrev'], "prev")}
-                <div className={"results curr"} dangerouslySetInnerHTML={{__html: item['paragraph']}}/>
-                {this.otherParagraphs(item['paragraphNext'], "next")}
-            </div>
-        )
-    }
+	paragraph = (item) => {
+		return (
+			<div className={"paragraphs"}
+				 style={{color: 'black', padding: '0 15px 15px 15px'}}>
+				{this.otherParagraphs(item['paragraphPrev'], "prev", item)}
+				<div className={"results curr"} dangerouslySetInnerHTML={{__html: item['paragraph']}}/>
+				{this.otherParagraphs(item['paragraphNext'], "next", item)}
+			</div>
+		)
+	}
 
-    otherParagraphs = (para, side) => {
-        if (para) {
-            if (side === "prev") {
-                return (
-                    <div className={"results prev"}>{para}</div>
-                )
-            }
-            else {
-                return (
-                    <div className={"results next"}>{para}</div>
-                )
-            }
-        }
-    }
+	otherParagraphs = (para, side, item) => {
+		const { clicked } = this.state;
+		if (para) {
+			if (side === "prev") {
+				let topMargin = (Math.round(para.length / 120) * - 12) - 5;
+				console.log("topMargin: ");
+				console.log(topMargin);
+				if (clicked.includes(item['book_num'] + item['para_num'])) {
+					topMargin = 15;
+				}
+				return (
+					<div
+						className={`results ${clicked.includes(item['book_num'] + item['para_num']) ? 'prev_clicked' : 'prev'}`}
+						style={{marginTop: topMargin}}
+					>
+						{para}
+					</div>
+				)
+			}
+			else {
+				return (
+					<div className={"results next"}>{para}</div>
+				)
+			}
+		}
+	}
 }
 
 Content.propTypes = {
-    query_json: PropTypes.func.isRequired,
-    chapters: PropTypes.any.isRequired,
-    currCount: PropTypes.number.isRequired,
-    count: PropTypes.number.isRequired,
-    perBookCount: PropTypes.any.isRequired,
+	query_json: PropTypes.func.isRequired,
+	chapters: PropTypes.any.isRequired,
+	currCount: PropTypes.number.isRequired,
+	count: PropTypes.number.isRequired,
+	query: PropTypes.string.isRequired,
+	perBookCount: PropTypes.any.isRequired,
 };
 
 export default Content;

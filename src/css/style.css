@@ -31,7 +31,7 @@ body {
 #search_container_default {
     background: rgba(31, 31, 31, .35);
     text-align: center;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -42,10 +42,8 @@ body {
     margin: auto;
     width: 80%;
     z-index: 1;
-    top: 0;
-    left: 0;
-    right: 0;
 }
+
 #section {
     padding:1.5rem;
     margin:0 auto;
@@ -83,17 +81,38 @@ body {
 }
 
 .card {
-    padding:0.3rem;
     background-color: white;
     margin: 0 1rem 1em;
+    overflow: hidden;
+    padding: 0 15px 15px;
 }
 
 .book_chap {
     font-size: 1.2em;
+    position: relative;
+    background-color: white;
+    margin-bottom: 15px;
+    margin-top: 0;
+    padding-top: 15px;
+}
+.book_chap_shadow {
+    -webkit-box-shadow: -6px 18px 25px 8px #ffffff;
+}
+
+.last_shadow {
+    position: absolute;
+    bottom: 0;
+    height: 15px;
+    background: white;
+    width: 100%;
+    -webkit-box-shadow: -6px -5px 25px 15px #ffffff;
+}
+.last_shadow_clicked {
+    display: none;
 }
 
 .paragraphs {
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 .results_found {
@@ -102,8 +121,20 @@ body {
     margin-top: 1em;
 }
 
+.prev_clicked {
+    margin-top: 14px;
+    -moz-transition: margin-top 0.3s;
+    -o-transition: margin-top 0.3s;
+    -ms-transition: margin-top 0.3s;
+    transition: margin-top 0.3s;
+}
+
 .prev {
-    margin-top: 0.9em;
+    margin-top: auto;
+    -moz-transition: margin-top 0.3s;
+    -o-transition: margin-top 0.3s;
+    -ms-transition: margin-top 0.3s;
+    transition: margin-top 0.3s;
 }
 
 .curr {
@@ -112,12 +143,22 @@ body {
 }
 
 .next {
+    -moz-transition: margin-top 0.3s;
+    -o-transition: margin-top 0.3s;
+    -ms-transition: margin-top 0.3s;
+    transition: margin-top 0.3s;
+}
+
+.next_clicked {
     /*margin-bottom: 0.9em;*/
+    -moz-transition: margin-top 0.3s;
+    -o-transition: margin-top 0.3s;
+    -ms-transition: margin-top 0.3s;
+    transition: margin-top 0.3s;
 }
 
 .load_more{
     text-align: center;
-    /*margin-bottom: 2em;*/
     margin-top: 1em;
 }
 
@@ -127,8 +168,7 @@ body {
 
 #footer {
     text-align: center;
-    font-size: 0.8em;
-    height: 1.5em;
+    font-size: 0.7em;
     color: #999;
     text-decoration: none;
 }
@@ -146,4 +186,14 @@ body {
 #footer a:visited {
     text-decoration: none;
     color: #999;
+}
+
+@media only screen and (max-width: 800px) {
+    .query {
+        font-size: 1.2em;
+    }
+    #search_container_default {
+        width: 90%;
+        height: 16em;
+    }
 }
