@@ -15,22 +15,28 @@ class Content extends React.Component {
 
 	clickContent = (id) => {
 		const { clicked } = this.state;
-		console.log("clickContent")
-		if (!clicked.includes(id)) {
-			let joined = clicked.concat(id);
-			this.setState({clicked: joined})
-		}
-		else {
-			let array = [...clicked];
-			const index = clicked.indexOf(id);
-			array.splice(index, 1);
-			this.setState({clicked: array})
+		const selection = window.getSelection();
+		if (selection.type !== "Range") {
+			if (!clicked.includes(id)) {
+				let joined = clicked.concat(id);
+				this.setState({clicked: joined})
+			}
+			else {
+				let array = [...clicked];
+				const index = clicked.indexOf(id);
+				array.splice(index, 1);
+				this.setState({clicked: array})
+			}
 		}
 	}
 
 	render() {
 		const { chapters } = this.props;
 		const { clicked } = this.state;
+		let mobileMaxHeight = 0;
+		if( window.innerWidth <= 800 ) {
+			mobileMaxHeight = 100;
+		}
 		return (
 			<Card id="content">
 				<div id="cards">
@@ -40,7 +46,7 @@ class Content extends React.Component {
 							className={'card clickable'}
 							key={item['paragraph']}
 							onClick={() => this.clickContent(item['book_num'] + item['para_num'])}>
-							<CardContent style={{position: 'relative', padding: 0, maxHeight: `${clicked.includes(item['book_num'] + item['para_num']) ? '' : '400px'}`}}>
+							<CardContent style={{position: 'relative', padding: 0, maxHeight: `${clicked.includes(item['book_num'] + item['para_num'])  ? '' : mobileMaxHeight + 400 + 'px'}`}}>
 								<div className={`book_chap ${clicked.includes(item['book_num'] + item['para_num']) ? '' : 'book_chap_shadow'}`}
 									 style={{color: 'black', padding: '15px 15px 15px'}}>
 									{item['book_name']} - {item['chapter_name']}

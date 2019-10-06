@@ -4,7 +4,7 @@ html, body, #app, #root {
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'promixa-nova', sans-serif;
     color: black;
     width: 100%;
     margin: 0;
@@ -94,6 +94,7 @@ body {
     margin-bottom: 15px;
     margin-top: 0;
     padding-top: 15px;
+    line-height: 1.125;
 }
 .book_chap_shadow {
     -webkit-box-shadow: -6px 18px 25px 8px #ffffff;
@@ -113,6 +114,7 @@ body {
 
 .paragraphs {
     font-size: 0.8em;
+    line-height: 1.5;
 }
 
 .results_found {
