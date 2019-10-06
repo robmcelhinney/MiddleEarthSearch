@@ -113,6 +113,7 @@ class Search extends React.Component {
 								margin: '0 auto',
 								maxWidth: 800
 							}}
+							placeholder={"type query here..."}
 							value={query || ""}
 						/>
 						<section>

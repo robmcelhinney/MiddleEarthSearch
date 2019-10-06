@@ -82,9 +82,9 @@ body {
 
 .card {
     background-color: white;
-    margin: 0 1rem 1em;
+    margin: 0 1rem 15px;
     overflow: hidden;
-    padding: 0 15px 15px;
+    padding: 0 15px 0;
 }
 
 .book_chap {

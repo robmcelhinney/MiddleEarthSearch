@@ -141,9 +141,13 @@ class Content extends React.Component {
 		const { clicked } = this.state;
 		if (para) {
 			if (side === "prev") {
-				let topMargin = (Math.round(para.length / 120) * - 12) - 5;
-				console.log("topMargin: ");
-				console.log(topMargin);
+				let topMargin;
+				if( window.innerWidth <= 800 ) {
+					topMargin = (Math.round(para.length / 30) * - 12) - 5;
+				}
+				else {
+					topMargin = (Math.round(para.length / 120) * - 12) - 5;
+				}
 				if (clicked.includes(item['book_num'] + item['para_num'])) {
 					topMargin = 15;
 				}
