@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.0/workbox-sw.js");
 
 importScripts(
-  "/MiddleEarthSearch/precache-manifest.a7f2c802af8eb86845e1546668ffbdf8.js"
+  "/MiddleEarthSearch/precache-manifest.14aa51f7e8e2990d7f81e5521afffb1a.js"
 );
 
 self.addEventListener('message', (event) => {
