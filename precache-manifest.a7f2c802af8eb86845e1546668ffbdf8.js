@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "21aaedc0f80ffc86bd4f847bd4dca4a8",
+    "revision": "9bc27cfa863d883ce6e41be0398615fb",
     "url": "/MiddleEarthSearch/index.html"
   },
   {
