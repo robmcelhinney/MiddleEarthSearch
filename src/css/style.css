@@ -162,6 +162,7 @@ body {
 .load_more{
     text-align: center;
     margin-top: 1em;
+    padding-top: 5px !important;
 }
 
 .clickable {
