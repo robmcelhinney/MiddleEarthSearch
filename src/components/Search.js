@@ -1,6 +1,6 @@
 import React, {createRef} from 'react';
 import Card from "@material-ui/core/Card";
-import MiddleEarth from "./../MiddleEarth.json"
+import MiddleEarth from "../MiddleEarth.json"
 import * as constants from "../constants";
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -32,6 +32,7 @@ class Search extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			MiddleEarthJson: {},
 			query: this.props.query,
 			chapters: [],
 			count: 0,
@@ -55,9 +56,13 @@ class Search extends React.Component {
 	}
 
 	componentDidMount() {
+		const MiddleEarthObj = JSON.parse(JSON.stringify(MiddleEarth));
+		this.setState({
+			MiddleEarthJson: MiddleEarthObj
+		})
 		if (this.props.query && this.props.query !== undefined) {
 			this.setState({query: this.props.query});
-			this.query_json();
+			this.query_json(true, MiddleEarthObj);
 			this.edit_title();
 		}
 	}
@@ -66,7 +71,7 @@ class Search extends React.Component {
 		//TODO ignore reset state from history.listen
 		this.resetState();
 		if (this.state.query) {
-			this.query_json();
+			this.query_json(true);
 			this.edit_url();
 		}
 	}
@@ -197,14 +202,16 @@ class Search extends React.Component {
 		);
 	}
 
-	query_json = (freshSearch=true) => {
+	query_json = (freshSearch=true, MiddleEarthJson=null) => {
 		const { books } = this.state;
+		if (MiddleEarthJson === null){
+			MiddleEarthJson = this.state.MiddleEarthJson;
+		}
 		let query = this.state.query.replace(/[.,/#!$%^&*;:{}=\-_~()/"/']/g, "");
 		query = query.trim();
 		if (query == null) {
 			return;
 		}
-		const MiddleEarthObj = JSON.parse(JSON.stringify(MiddleEarth));
 		let count = 0;
 		let results = [];
 		let currCount = 1;
@@ -215,11 +222,11 @@ class Search extends React.Component {
 		let maxCount = currCount + MAXCARDS;
 		let perBookCount = {};
 
-		for(let book in MiddleEarth) {
+		for(let book in MiddleEarthJson) {
 			let countPerBook = 0;
 			if (books.length === 0 || books.includes(book)) {
-				for (let section in MiddleEarthObj[book]) {
-					let para = MiddleEarthObj[book][section]['paragraph'].replace(/[.,/#!$%^&*;:{}=\-_`~()/"/']/g, "");
+				for (let section in MiddleEarthJson[book]) {
+					let para = MiddleEarthJson[book][section]['paragraph'].replace(/[.,/#!$%^&*;:{}=\-_`~()/"/']/g, "");
 					if (new RegExp(query, 'giu').test(para)
 						&& !new RegExp(query).test("<b>")) {
 						countPerBook++;
@@ -228,29 +235,29 @@ class Search extends React.Component {
 							continue;
 						}
 						currCount++;
-						MiddleEarthObj[book][section]['paragraph'] =
-							this.boldText(MiddleEarthObj[book][section]['paragraph'], query);
+						MiddleEarthJson[book][section]['paragraph'] =
+							this.boldText(MiddleEarthJson[book][section]['paragraph'], query);
 
 						if (Number(section) > 0 &&
-							MiddleEarthObj[book][section]['chapter_num']
-							=== MiddleEarthObj[book][Number(section) - 1][
+							MiddleEarthJson[book][section]['chapter_num']
+							=== MiddleEarthJson[book][Number(section) - 1][
 								'chapter_num']) {
-							MiddleEarthObj[book][section]['paragraphPrev'] =
-								MiddleEarthObj[book][Number(section) - 1][
+							MiddleEarthJson[book][section]['paragraphPrev'] =
+								MiddleEarthJson[book][Number(section) - 1][
 									'paragraph'].replace(/(<b>|<\/b>)/g, "");
 						}
-						if (Number(section) + 1 < MiddleEarthObj[book].length &&
-							MiddleEarthObj[book][section]['chapter_num']
-							=== MiddleEarthObj[book][Number(section) + 1][
+						if (Number(section) + 1 < MiddleEarthJson[book].length &&
+							MiddleEarthJson[book][section]['chapter_num']
+							=== MiddleEarthJson[book][Number(section) + 1][
 								'chapter_num']) {
-							MiddleEarthObj[book][section]['paragraphNext'] =
-								MiddleEarthObj[book][Number(section) + 1][
+							MiddleEarthJson[book][section]['paragraphNext'] =
+								MiddleEarthJson[book][Number(section) + 1][
 									'paragraph']
 						}
-						results.push(MiddleEarthObj[book][section]);
+						results.push(MiddleEarthJson[book][section]);
 					}
 				}
-				perBookCount[MiddleEarthObj[book][0]['book_name']] = countPerBook;
+				perBookCount[MiddleEarthJson[book][0]['book_name']] = countPerBook;
 			}
 		}
 
