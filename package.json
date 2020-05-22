@@ -2,7 +2,6 @@
   "name": "lotrsearch",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://robmcelhinney.github.io/MiddleEarthSearch/",
   "dependencies": {
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^4.4.3",

@@ -343,7 +343,7 @@ class Search extends React.Component {
 		if (books && books.length > 0) {
 			book_param = books.map(a => "&books[]=" + a).join('');
 		}
-		window.history.pushState({}, document.title, "/MiddleEarthSearch/#/?q=" + query + book_param);
+		window.history.pushState({}, document.title, "/#/?q=" + query + book_param);
 		this.edit_title();
 	}
 
