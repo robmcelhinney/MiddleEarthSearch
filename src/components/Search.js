@@ -110,7 +110,7 @@ class Search extends React.Component {
 			<div id={"search"}>
 				<Card id="search_container_default">
 					<section id="section">
-						<section className="query">{constants.title}</section>
+						<section className="title">{constants.title}</section>
 						<SearchBar
 							onChange={(e) => this.setState({query: e})}
 							onRequestSearch={() => this.reset_and_search()}
@@ -167,22 +167,22 @@ class Search extends React.Component {
 										className={classes.label}
 									/>
 								</FormGroup>
-								{/*<FormGroup aria-label="position" name="position" row>*/}
-									{/*<FormControlLabel*/}
-										{/*value="TABA"*/}
-										{/*control={<Checkbox style={{color: 'white'}} />}*/}
-										{/*label={*/}
-											{/*<Typography*/}
-												{/*style={{color: 'white'}}>*/}
-												{/*The Hobbit*/}
-											{/*</Typography>}*/}
-										{/*labelPlacement="end"*/}
-										{/*name="TABA"*/}
-										{/*defaultChecked={books.includes("TABA")}*/}
-										{/*onChange={this.handleChangeBooks}*/}
-										{/*className={classes.label}*/}
-									{/*/>*/}
-								{/*</FormGroup>*/}
+								{/* <FormGroup aria-label="position" name="position" row>
+									<FormControlLabel
+										value="TABA"
+										control={<Checkbox style={{color: 'white'}} />}
+										label={
+											<Typography
+												style={{color: 'white'}}>
+												The Hobbit
+											</Typography>}
+										labelPlacement="end"
+										name="TABA"
+										defaultChecked={books.includes("TABA")}
+										onChange={this.handleChangeBooks}
+										className={classes.label}
+									/>
+								</FormGroup> */}
 							</FormControl>
 						</section>
 					</section>
@@ -203,6 +203,9 @@ class Search extends React.Component {
 	}
 
 	query_json = (freshSearch=true, MiddleEarthJson=null) => {
+		// uses regex to find query in books.
+		// freshSearch means to search from scratch or to continue on 
+		// from previous search by remembering where it stopped.
 		const { books } = this.state;
 		if (MiddleEarthJson === null){
 			MiddleEarthJson = this.state.MiddleEarthJson;
@@ -215,50 +218,72 @@ class Search extends React.Component {
 		let count = 0;
 		let results = [];
 		let currCount = 1;
+
 		if (!freshSearch) {
+			// Get where last search stopped.
 			results = this.state.chapters;
 			currCount = this.state.currCount;
 		}
 		let maxCount = currCount + MAXCARDS;
 		let perBookCount = {};
 
+		console.log("MiddleEarthJson: ", MiddleEarthJson)
+
+		// Stores changes from MiddleEarthJson so it doesn't change on 
+		// each search.
+		let resultJson = {}
+		let bookNum = 1
 		for(let book in MiddleEarthJson) {
 			let countPerBook = 0;
 			if (books.length === 0 || books.includes(book)) {
+				resultJson[book] = {}
+				let paraNum = 1
 				for (let section in MiddleEarthJson[book]) {
 					let para = MiddleEarthJson[book][section]['paragraph'].replace(/[.,/#!$%^&*;:{}=\-_`~()/"/']/g, "");
+					
 					if (new RegExp(query, 'giu').test(para)
-						&& !new RegExp(query).test("<b>")) {
+							&& !new RegExp(query).test("<b>")) {
+						
+						resultJson[book][section] = Object.assign({}, MiddleEarthJson[book][section])
+						resultJson[book][section]["para_num"] = paraNum
+						resultJson[book][section]["book_num"] = bookNum
 						countPerBook++;
 						count++;
 						if (currCount === maxCount || count < currCount) {
 							continue;
 						}
 						currCount++;
-						MiddleEarthJson[book][section]['paragraph'] =
-							this.boldText(MiddleEarthJson[book][section]['paragraph'], query);
+						
+						// Get current paragraph
+						resultJson[book][section]["paragraph"] =
+							this.boldText(MiddleEarthJson[book][section]["paragraph"], query);
 
+						// Get previous paragraph if it exists
 						if (Number(section) > 0 &&
-							MiddleEarthJson[book][section]['chapter_num']
-							=== MiddleEarthJson[book][Number(section) - 1][
-								'chapter_num']) {
-							MiddleEarthJson[book][section]['paragraphPrev'] =
-								MiddleEarthJson[book][Number(section) - 1][
-									'paragraph'].replace(/(<b>|<\/b>)/g, "");
+								MiddleEarthJson[book][section]["chapter_num"]
+								=== MiddleEarthJson[book][Number(section) - 1][
+									"chapter_num"]) {
+							resultJson[book][section]["paragraphPrev"] =
+									MiddleEarthJson[book][Number(section) - 1][
+									"paragraph"].replace(/(<b>|<\/b>)/g, "");
 						}
+
+						// Get next paragraph if it exists
 						if (Number(section) + 1 < MiddleEarthJson[book].length &&
-							MiddleEarthJson[book][section]['chapter_num']
-							=== MiddleEarthJson[book][Number(section) + 1][
-								'chapter_num']) {
-							MiddleEarthJson[book][section]['paragraphNext'] =
-								MiddleEarthJson[book][Number(section) + 1][
-									'paragraph']
+								MiddleEarthJson[book][section]["chapter_num"]
+								=== MiddleEarthJson[book][Number(section) + 1][
+								"chapter_num"]) {
+							resultJson[book][section]["paragraphNext"] =
+									MiddleEarthJson[book][Number(section) + 1][
+									"paragraph"]
 						}
-						results.push(MiddleEarthJson[book][section]);
+						results.push(resultJson[book][section]);
 					}
+					paraNum++
 				}
-				perBookCount[MiddleEarthJson[book][0]['book_name']] = countPerBook;
+				perBookCount[MiddleEarthJson[book][0]["book_name"]] = countPerBook;
 			}
+			bookNum++
 		}
 
 		if (freshSearch) {
@@ -274,35 +299,45 @@ class Search extends React.Component {
 	}
 
 	boldText = (strSubject, query) => {
+		// Bold query inside strSubject and return result 
 		query = this.basic_words(query);
 		let words = query.split(" ");
-		for (let s = 0; s < words.length; s += 1)
-		{
-			let pattern = new RegExp('\\b' + this.preg_quote(words[s], "/") + '\\b','gi');
+		for (let s = 0; s < words.length; s += 1){
+			const pattern = new RegExp(
+					'\\b' + this.preg_quote(words[s]) + '\\b','gi');
 			strSubject = strSubject.replace(pattern, "<b>$&</b>","\n");
 		}
 		return strSubject;
 	}
 
-	preg_quote = (str, delimiter) => {
+	preg_quote = (str) => {
+		// takes str and puts a backslash in front of every character 
+		// that is part of the regular expression syntax
 		return (str + '').replace(
-				new RegExp('[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' +
-				(delimiter || '') + '-]', 'g'), '\\$&');
+				new RegExp("[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\/-]", 'g'),
+				'\\$&');
 	}
 
 	basic_words = (query) => {
-		let keyword_array = ['a','about','an','are','as','at','be', 'by','com','for','from','how','i','in','is','it','la','of','on','or', 'that','the','this','to','was','what','when','where', 'who','will','with'];
+		// Takes common words out of query
+		const keyword_array = ['a','about','an','are','as','at','be', 'by',
+				'com','for','from','how','i','in','is','it','la','of','on',
+				'or', 'that','the','this','to','was','what','when','where', 
+				'who','will','with']
 		query = query.replace('/\b(' + keyword_array.join('|') + ')\b/i', '');
 		let replaced = query.replace(/\b\w+\b/g, function ($m) {
-			let key = keyword_array.indexOf($m);
+			const key = keyword_array.indexOf($m);
 			return (key !== -1)? '' : $m;
 		});
-		replaced = replaced.replace(/\s+/g,' ');
-		replaced = replaced.trim();
+		// replaces any any whitespace character with single space
+		replaced = replaced.replace(/\s+/g,' ')
+		// strip trailing whitespaces
+		replaced = replaced.trim()
 		return replaced
 	}
 
 	edit_url = () => {
+		// Edits url for SPA.
 		const { books, query } = this.state;
 		let book_param = "";
 		if (books && books.length > 0) {
@@ -313,6 +348,7 @@ class Search extends React.Component {
 	}
 
 	edit_title = () => {
+		// Updates page title with current query.
 		document.title = constants.title + ' - ' + this.state.query;
 	}
 }
