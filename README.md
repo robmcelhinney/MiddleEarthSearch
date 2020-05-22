@@ -1,7 +1,7 @@
 # MiddleEarthSearch | Search text from The Lord of the Rings
 Viewable at [https://robmcelhinney.github.io/MiddleEarthSearch/](https://robmcelhinney.github.io/MiddleEarthSearch/)
 
-Attempted to make this website so that it could solely be hosted by Github, no need to use external database or any server side code, a static webpage only.
+Attempted to make this website so that it could solely be hosted by Github, no need to use an external database or any server side code, a static webpage only.
 
 ## Install
 
@@ -17,10 +17,25 @@ Attempted to make this website so that it could solely be hosted by Github, no n
 
     $ npm run build
 
+## Create json file that stores book data
+Store the trilogy of books in the books/ directory as .txt files as ["The-Fellowship-of-the-Ring.txt", "The-Twin-Towers.txt", "Return-of-the-King.txt"]
+
+Python 3 must be installed.
+
+    $ cd python
+    $ python lotr-json.py
+
+Then move the resulting MiddleEarth.json into the src/ directory.
+
+## Docker
+View the docker branch of this repo.
+
 ## Future plans
-Store book quotes in sqlite database rather than in json but keep sqlite parsing limited to the client.
+* Store book data in sqlite database rather than in json but keep sqlite parsing limited to the client.
+
+* Add tests.
 
 
 ## Acknowledgments
 * Inspiration: [http://asearchoficeandfire.com/](http://asearchoficeandfire.com/)
-* Already created: [https://github.com/robmcelhinney/A-Song-Of-Ice-And-Fire-Search](https://github.com/robmcelhinney/A-Song-Of-Ice-And-Fire-Search) made using PHP and a mySQL database.
+* Already created: [https://github.com/robmcelhinney/A-Song-Of-Ice-And-Fire-Search](https://github.com/robmcelhinney/A-Song-Of-Ice-And-Fire-Search) made using PHP and a MySQL database.
