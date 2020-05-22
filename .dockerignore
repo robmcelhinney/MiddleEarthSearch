@@ -2,3 +2,5 @@ node_modules
 .dockerignore
 Dockerfile
 Dockerfile.prod
+books
+python

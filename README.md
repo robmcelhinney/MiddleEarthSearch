@@ -28,7 +28,17 @@ Python 3 must be installed.
 Then move the resulting MiddleEarth.json into the src/ directory.
 
 ## Docker
-View the docker branch of this repo.
+View at http://localhost/ (no need to specify a port).
+Build & Run Development container
+
+    $ docker build -t middledev .
+    $ docker run --rm -dp 80:3000 --name middledev middledev
+
+
+Build & Run Production container
+
+    $ docker build --rm -f Dockerfile.prod -t middle-earth-prod .
+    $ docker run --rm -dp 80:80 --name middle-earth middle-earth-prod
 
 ## Future plans
 * Store book data in sqlite database rather than in json but keep sqlite parsing limited to the client.
