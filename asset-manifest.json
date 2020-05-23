@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/MiddleEarthSearch/static/css/main.75582921.chunk.css",
-    "main.js": "/MiddleEarthSearch/static/js/main.91f07311.chunk.js",
-    "main.js.map": "/MiddleEarthSearch/static/js/main.91f07311.chunk.js.map",
+    "main.css": "/MiddleEarthSearch/static/css/main.47bb824c.chunk.css",
+    "main.js": "/MiddleEarthSearch/static/js/main.adef410b.chunk.js",
+    "main.js.map": "/MiddleEarthSearch/static/js/main.adef410b.chunk.js.map",
     "runtime~main.js": "/MiddleEarthSearch/static/js/runtime~main.92b223e3.js",
     "runtime~main.js.map": "/MiddleEarthSearch/static/js/runtime~main.92b223e3.js.map",
     "static/js/2.5388a9fd.chunk.js": "/MiddleEarthSearch/static/js/2.5388a9fd.chunk.js",
     "static/js/2.5388a9fd.chunk.js.map": "/MiddleEarthSearch/static/js/2.5388a9fd.chunk.js.map",
     "index.html": "/MiddleEarthSearch/index.html",
-    "precache-manifest.c58da45ed18132990d0b7d696ef01af0.js": "/MiddleEarthSearch/precache-manifest.c58da45ed18132990d0b7d696ef01af0.js",
+    "precache-manifest.e0644bb963be76af682095fe4f0e66a1.js": "/MiddleEarthSearch/precache-manifest.e0644bb963be76af682095fe4f0e66a1.js",
     "service-worker.js": "/MiddleEarthSearch/service-worker.js",
-    "static/css/main.75582921.chunk.css.map": "/MiddleEarthSearch/static/css/main.75582921.chunk.css.map",
-    "static/media/style.css": "/MiddleEarthSearch/static/media/balrog.9ee42761.jpg"
+    "static/css/main.47bb824c.chunk.css.map": "/MiddleEarthSearch/static/css/main.47bb824c.chunk.css.map",
+    "static/media/style.css": "/MiddleEarthSearch/static/media/ringbearer.medium.15e72b71.ttf"
   }
 }
