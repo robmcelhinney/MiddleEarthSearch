@@ -1,6 +1,6 @@
 import React, {createRef} from 'react';
 import Card from "@material-ui/core/Card";
-import MiddleEarth from "../MiddleEarth.json"
+import Book from "../books.json"
 import * as constants from "../constants";
 import Checkbox from '@material-ui/core/Checkbox';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -32,7 +32,7 @@ class Search extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			MiddleEarthJson: {},
+			BookJson: {},
 			query: this.props.query,
 			chapters: [],
 			count: 0,
@@ -56,13 +56,13 @@ class Search extends React.Component {
 	}
 
 	componentDidMount() {
-		const MiddleEarthObj = JSON.parse(JSON.stringify(MiddleEarth));
+		const BookObj = JSON.parse(JSON.stringify(Book));
 		this.setState({
-			MiddleEarthJson: MiddleEarthObj
+			BookJson: BookObj
 		})
 		if (this.props.query && this.props.query !== undefined) {
 			this.setState({query: this.props.query});
-			this.query_json(true, MiddleEarthObj);
+			this.query_json(true, BookObj);
 			this.edit_title();
 		}
 	}
@@ -125,44 +125,44 @@ class Search extends React.Component {
 							<FormControl component="fieldset">
 								<FormGroup aria-label="position" name="position" row>
 									<FormControlLabel
-										value="TFOTR"
-										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("TFOTR")}/>}
+										value="The-Fellowship-of-the-Ring"
+										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("The-Fellowship-of-the-Ring")}/>}
 										label={
 											<Typography
 													style={{color: 'white'}}>
 												The Fellowship of the Ring
 											</Typography>}
 										labelPlacement="end"
-										name="TFOTR"
-										defaultChecked={books.includes("TFOTR")}
+										name="The-Fellowship-of-the-Ring"
+										defaultChecked={books.includes("The-Fellowship-of-the-Ring")}
 										onChange={this.handleChangeBooks}
 										className={classes.label}
 									/>
 									<FormControlLabel
-										value="TTT"
-										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("TTT")}/>}
+										value="The-Twin-Towers"
+										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("The-Twin-Towers")}/>}
 										label={
 											<Typography
 													style={{color: 'white'}}>
 												The Twin Towers
 											</Typography>}
 										labelPlacement="end"
-										name="TTT"
-										defaultChecked={books.includes("TTT")}
+										name="The-Twin-Towers"
+										defaultChecked={books.includes("The-Twin-Towers")}
 										onChange={this.handleChangeBooks}
 										className={classes.label}
 									/>
 									<FormControlLabel
-										value="ROTK"
-										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("ROTK")}/>}
+										value="Return-of-the-King"
+										control={<Checkbox style={{color: 'white'}} defaultChecked={books.includes("Return-of-the-King")}/>}
 										label={
 											<Typography
 													style={{color: 'white'}}>
 												The Return of the King
 											</Typography>}
 										labelPlacement="end"
-										name="ROTK"
-										defaultChecked={books.includes("ROTK")}
+										name="Return-of-the-King"
+										defaultChecked={books.includes("Return-of-the-King")}
 										onChange={this.handleChangeBooks}
 										className={classes.label}
 									/>
@@ -202,13 +202,13 @@ class Search extends React.Component {
 		);
 	}
 
-	query_json = (freshSearch=true, MiddleEarthJson=null) => {
+	query_json = (freshSearch=true, BookJson=null) => {
 		// uses regex to find query in books.
 		// freshSearch means to search from scratch or to continue on 
 		// from previous search by remembering where it stopped.
 		const { books } = this.state;
-		if (MiddleEarthJson === null){
-			MiddleEarthJson = this.state.MiddleEarthJson;
+		if (BookJson === null){
+			BookJson = this.state.BookJson;
 		}
 		let query = this.state.query.replace(/[.,/#!$%^&*;:{}=\-_~()/"/']/g, "");
 		query = query.trim();
@@ -227,24 +227,22 @@ class Search extends React.Component {
 		let maxCount = currCount + MAXCARDS;
 		let perBookCount = {};
 
-		console.log("MiddleEarthJson: ", MiddleEarthJson)
-
-		// Stores changes from MiddleEarthJson so it doesn't change on 
+		// Stores changes from BookJson so it doesn't change on 
 		// each search.
 		let resultJson = {}
 		let bookNum = 1
-		for(let book in MiddleEarthJson) {
+		for(let book in BookJson) {
 			let countPerBook = 0;
 			if (books.length === 0 || books.includes(book)) {
 				resultJson[book] = {}
 				let paraNum = 1
-				for (let section in MiddleEarthJson[book]) {
-					let para = MiddleEarthJson[book][section]['paragraph'].replace(/[.,/#!$%^&*;:{}=\-_`~()/"/']/g, "");
+				for (let section in BookJson[book]) {
+					let para = BookJson[book][section]['paragraph'].replace(/[.,/#!$%^&*;:{}=\-_`~()/"/']/g, "");
 					
 					if (new RegExp(query, 'giu').test(para)
 							&& !new RegExp(query).test("<b>")) {
 						
-						resultJson[book][section] = Object.assign({}, MiddleEarthJson[book][section])
+						resultJson[book][section] = Object.assign({}, BookJson[book][section])
 						resultJson[book][section]["para_num"] = paraNum
 						resultJson[book][section]["book_num"] = bookNum
 						countPerBook++;
@@ -256,32 +254,32 @@ class Search extends React.Component {
 						
 						// Get current paragraph
 						resultJson[book][section]["paragraph"] =
-							this.boldText(MiddleEarthJson[book][section]["paragraph"], query);
+							this.boldText(BookJson[book][section]["paragraph"], query);
 
 						// Get previous paragraph if it exists
 						if (Number(section) > 0 &&
-								MiddleEarthJson[book][section]["chapter_num"]
-								=== MiddleEarthJson[book][Number(section) - 1][
+								BookJson[book][section]["chapter_num"]
+								=== BookJson[book][Number(section) - 1][
 									"chapter_num"]) {
 							resultJson[book][section]["paragraphPrev"] =
-									MiddleEarthJson[book][Number(section) - 1][
+									BookJson[book][Number(section) - 1][
 									"paragraph"].replace(/(<b>|<\/b>)/g, "");
 						}
 
 						// Get next paragraph if it exists
-						if (Number(section) + 1 < MiddleEarthJson[book].length &&
-								MiddleEarthJson[book][section]["chapter_num"]
-								=== MiddleEarthJson[book][Number(section) + 1][
+						if (Number(section) + 1 < BookJson[book].length &&
+								BookJson[book][section]["chapter_num"]
+								=== BookJson[book][Number(section) + 1][
 								"chapter_num"]) {
 							resultJson[book][section]["paragraphNext"] =
-									MiddleEarthJson[book][Number(section) + 1][
+									BookJson[book][Number(section) + 1][
 									"paragraph"]
 						}
 						results.push(resultJson[book][section]);
 					}
 					paraNum++
 				}
-				perBookCount[MiddleEarthJson[book][0]["book_name"]] = countPerBook;
+				perBookCount[BookJson[book][0]["book_name"]] = countPerBook;
 			}
 			bookNum++
 		}
