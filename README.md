@@ -18,7 +18,6 @@ Attempted to make this website so that it could solely be hosted by Github, no n
     $ npm run build
 
 ## Create json file that stores book data
-Store the trilogy of books in the books/ directory as .txt files as ["The-Fellowship-of-the-Ring.txt", "The-Twin-Towers.txt", "Return-of-the-King.txt"]
 
 Store any books in the books/ directory as .txt files. e.g. ["The-Fellowship-of-the-Ring.txt", "The-Twin-Towers.txt", "Return-of-the-King.txt"]
 
