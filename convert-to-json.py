@@ -36,7 +36,7 @@ def add_file_to_json(filename, data):
 
         # If the line is Chapter [NUM] then use the next (non-empty)
         # line as the chapter name.
-        match_chapter = re.match(r'Chapter [0-9]+', line)
+        match_chapter = re.match(r'Chapter ([A-Za-z-]|[0-9])+$', line)
         if skip_next:
             skip_next = False
             continue
