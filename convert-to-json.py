@@ -34,22 +34,17 @@ def add_file_to_json(filename, data):
     for i in range(len(lines[1:])):
         line = lines[i]
 
-        # If the line is Chapter [NUM] then use the next line as the
-        # chapter name.
+        # If the line is Chapter [NUM] then use the next (non-empty)
+        # line as the chapter name.
         match_chapter = re.match(r'Chapter [0-9]+', line)
         if skip_next:
             skip_next = False
             continue
         if line and match_chapter:
             chapter_num += 1
-            next_line = lines[i + 1]
-            next_line = next_line.replace("'", "''")
-            chapter_name = next_line
+            chapter_name = next_non_empty_line(i, lines)
             skip_next = True
         else:
-            next_line = ""
-            if (i + 1 != len(lines)):
-                next_line = lines[i + 1]
             if not line.strip():
                 if preline.strip():
                     paragraph = paragraph.replace('\n', '')
@@ -69,6 +64,13 @@ def add_file_to_json(filename, data):
             preline = line
     data[book_name] = book_data
 
+def next_non_empty_line(i, lines):
+    while i < len(lines) - 1:
+        line = lines[i + 1]
+        if line != "" and not line.isspace():
+            return line.replace("'", "''")
+        i += 1
+    return ""
 
 def write_to_json(data):
     with open('src/books.json', 'w') as file:
