@@ -30,7 +30,6 @@ def main():
         file_path = os.path.join(src, file_name)
         add_file_to_json(file_path, dest)
 
-
 def add_file_to_json(filename, dest):
     book = epub.read_epub(filename)
     book_name = Path(filename).stem
