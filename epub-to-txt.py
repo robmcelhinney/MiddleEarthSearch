@@ -5,7 +5,8 @@ from ebooklib import epub
 from bs4 import BeautifulSoup
 import argparse
 
-blacklist = ['[document]', 'noscript', 'header', 'html', 'meta', 'head', 'input', 'script']
+# https://medium.com/@zazazakaria18/turn-your-ebook-to-text-with-python-in-seconds-2a1e42804913
+blocklist = ['[document]', 'noscript', 'header', 'html', 'meta', 'head', 'input', 'script']
 
 def main():
     parser = argparse.ArgumentParser(description='Convert epub to txt',
@@ -52,7 +53,7 @@ def chapter_to_text(chap):
     text = soup.find_all(text=True)
     prev = ''
     for t in text:
-        if t.parent.name not in blacklist:
+        if t.parent.name not in blocklist:
             if not t.isspace():
                 if not (str(prev).endswith(' ') or str(t).startswith(' ')):
                     output += '\n\n'
