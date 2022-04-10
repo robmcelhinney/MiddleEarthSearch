@@ -17,15 +17,19 @@ Attempted to make this website so that it could solely be hosted by Github, no n
 
     $ npm run build
 
+## Convert epub to txt
+
+The script does require a text file so you may need to run the following command to create a txt file from an epub.
+
+    $ python epub-to-json.py -d books -f The-Fellowship-of-the-Ring.epub
+
 ## Create json file that stores book data
-Store the trilogy of books in the books/ directory as .txt files as ["The-Fellowship-of-the-Ring.txt", "The-Twin-Towers.txt", "Return-of-the-King.txt"]
+
+Store any books in the books/ directory as .txt files. e.g. ["The-Fellowship-of-the-Ring.txt", "The-Twin-Towers.txt", "Return-of-the-King.txt"]
 
 Python 3 must be installed.
 
-    $ cd python
-    $ python lotr-json.py
-
-Then move the resulting MiddleEarth.json into the src/ directory.
+    $ python convert-to-json.py
 
 ## Docker
 View the docker branch of this repo.
